@@ -1,0 +1,7 @@
+results/*
+
+resources
+.snakemake/*
+.snakemake/
+.vscode/
+.idea/*
