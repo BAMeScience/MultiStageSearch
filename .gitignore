@@ -1,6 +1,6 @@
 results/*
+resources/*
 
-resources
 .snakemake/*
 .snakemake/
 .vscode/
