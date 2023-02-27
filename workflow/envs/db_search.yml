@@ -1,0 +1,11 @@
+name: DBSearch
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - anaconda::libcurl=7.87.0 # for searchgui
+  - searchgui=4.1.24 # only for x64 architecture, otherwise the manually installed version has to be used. See PepGM for this.
+  - peptide-shaker=2.2.17
+

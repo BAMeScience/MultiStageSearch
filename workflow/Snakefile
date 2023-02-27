@@ -1,0 +1,37 @@
+# config
+configfile: "config/config.yaml"
+
+# imports
+from pathlib import Path
+import pandas as pd 
+
+
+# global variables
+SAMPLES = pd.read_csv(config["samples"],index_col="sample",sep='\t')
+MGF_FILE = lambda wildcards: SAMPLES.at[wildcards.sample, 'mgf']
+PAR_FILE = lambda wildcards: SAMPLES.at[wildcards.sample, 'par']
+HOST_FASTA = lambda wildcards: SAMPLES.at[wildcards.sample, 'host_fasta']
+HOST_NAME = lambda wildcards: SAMPLES.at[wildcards.sample, 'host_name']
+
+RESULT_DIR = Path(config["result_dir"])
+SKIP_HOST_FILTERING = config["host_filtering"]["skip_host_filtering"]
+
+
+# include load functions
+include: "rules/load_functions.smk"
+
+# collect all output files
+rule all:
+    input:
+        General.get_input_all
+
+# includes
+include: "rules/host_filtering.smk"
+include: "rules/first_db_search.smk"
+
+
+
+#TODO
+# fix conda channel prio
+# conda strict prio is false
+
