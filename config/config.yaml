@@ -7,8 +7,6 @@ host_filtering:
   psm_fdr: 1
   peptide_fdr: 1 
   protein_fdr: 1
-  host_name: RattusNorvegicus
-  host: "resources/Database/GCF_015227675.2_mRatBN7.2_protein.faa"
 
 db_search:
   ref: "resources/Database/refSeqViral.fasta"

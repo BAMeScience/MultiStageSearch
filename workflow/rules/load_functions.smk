@@ -8,6 +8,7 @@ class General:
         #     input_list += expand(RESULT_DIR / "{sample}/SpectraFilter/Filtered_host.mgf", sample=list(SAMPLES.index))
         
         input_list += expand(RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt", sample=list(SAMPLES.index))
+        input_list += expand(RESULT_DIR / "{sample}/FirstSearch/Filtered_host.t.xml.gz", sample=list(SAMPLES.index))
 
         return input_list
 
