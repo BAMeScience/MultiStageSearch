@@ -14,3 +14,10 @@ db_search:
   psm_fdr: 1
   peptide_fdr: 1 
   protein_fdr: 1
+
+
+ms2rescore:
+  RescorePipeline: '"tandem"' # any of ['infer', 'pin', 'tandem', 'maxquant', 'msgfplus', 'peptideshaker']
+  RescoreFeatures: '[["searchengine", "ms2pip", "rt"]]' #[["searchengine", "ms2pip", "rt"]],
+  RunPercolator: 'true' #boolean
+  FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models

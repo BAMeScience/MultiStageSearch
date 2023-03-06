@@ -1,7 +1,22 @@
+rule AddDecoysRef:
+    input: 
+        ref = config["db_search"]["ref"],
+    output: 
+        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta"
+    log:
+        stderr_log=RESULT_DIR / "logs/FirstSearch/RefDB/stderr.log",
+        stdout_log=RESULT_DIR / "logs/FirstSearch/RefDB/stdout.log" 
+    conda:
+        "../envs/db_search.yml"
+    threads: 1
+    shell: 
+        "searchgui eu.isas.searchgui.cmd.FastaCLI -in {input.ref} -decoy > {log.stdout_log} 2> {log.stderr_log}"
+
+
 rule SearchSpectraAgainstReference:
     input: 
+        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
         mgf = SearchDB.get_input_SearchDB()["mfg"],
-        ref = config["db_search"]["ref"],
         par = PAR_FILE,
     output:  
         out_zip = RESULT_DIR / "{sample}/FirstSearch/ref_searchgui_out.zip"
@@ -19,7 +34,7 @@ rule SearchSpectraAgainstReference:
         "../envs/db_search.yml"
     threads: workflow.cores / 2
     shell: 
-        "searchgui eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.ref} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr 1 -peptide_fdr 1 -protein_fdr 1 {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
+        "searchgui eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.ref_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr 1 -peptide_fdr 1 -protein_fdr 1 {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule RunPeptideShakerRef:
@@ -69,3 +84,18 @@ rule extractSearchGuiResults:
     threads: 1
     shell:
         "unzip -u {input.searchgui_zip} -d {params.out_dir}"
+
+
+rule createMS2RescoreConfig:
+    input: 
+        xTandem_out = RESULT_DIR / "{sample}/FirstSearch/Filtered_host.t.xml.gz"
+    output:
+        out_dir = RESULT_DIR / "{sample}/FirstSearch/MS2Rescore/config.json"
+    params:
+        pipeline = config["ms2rescore"]["RescorePipeline"],
+        features = config["ms2rescore"]["RescoreFeatures"],
+        percolator = config["ms2rescore"]["RunPercolator"],
+        fragmodel = config["ms2rescore"]["FragModel"]
+    threads: 1
+    script:
+        "../scripts/ms2rescore_config.py"
