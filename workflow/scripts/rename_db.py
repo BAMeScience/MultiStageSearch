@@ -13,5 +13,4 @@ included_extensions = ['fasta']
 file_names = [fn for fn in os.listdir(full_in_path)
               if any(fn.endswith(ext) for ext in included_extensions)]
 
-print(file_names[0])
 os.rename(full_in_path + "/" + file_names[0], full_out_path + "/" + sample_name + "_protein_concatenated_target_decoy.fasta")
