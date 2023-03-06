@@ -6,6 +6,8 @@ class General:
         input_list += expand(RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/FirstSearch/Filtered_host.t.xml.gz", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/FirstSearch/MS2Rescore/config.json", sample=list(SAMPLES.index))
+        input_list += expand(RESULT_DIR / "{sample}/taxids/mapped_taxids.tsv", sample=list(SAMPLES.index))
+        #input_list.append(RESULT_DIR / "taxidMapping/accessions_hashed.npy")
 
         return input_list
 
@@ -22,3 +24,15 @@ class SearchDB:
                 "mfg": MGF_FILE,
                 }
         return data_dict
+
+class Mapping:
+    @staticmethod
+    def get_input_getTargets():
+        ref_path = str(config["db_search"]["ref"])
+        input_list = [
+            RESULT_DIR / "{sample}/{ref_path}_Default_PSM_Report.txt",
+            "resources/taxidMapping/accessions_hashed.npy",
+            "resources/taxidMapping/taxids.txt"
+        ]
+        return input_list
+        

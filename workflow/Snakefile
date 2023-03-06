@@ -28,6 +28,8 @@ rule all:
 # includes
 include: "rules/host_filtering.smk"
 include: "rules/first_db_search.smk"
+include: "rules/buildDatabase.smk"
+include: "rules/mapping.smk"
 
 
 

@@ -1,0 +1,10 @@
+name: hashing
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - python=3.9
+  - mmh3=3.0.0
+  - numpy=1.23.5
