@@ -6,8 +6,8 @@ rule AddDecoysHost:
     output: 
         touch(RESULT_DIR / "{sample}/Database/AddDecoysHost.done")
     log:
-        stderr_log=RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stderr.log",
-        stdout_log=RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stdout.log" 
+        stderr_log = RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stderr.log",
+        stdout_log = RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stdout.log" 
     conda:
         "../envs/host_filtering.yml"
     threads: 1
@@ -36,8 +36,8 @@ rule SearchHostSpectra:
     output:  
         out_zip = RESULT_DIR / "{sample}/SpectraFilter/host_searchgui_out.zip"
     log:
-        stderr_log=RESULT_DIR / "logs/hostfiltering/SearchHostSpectra/{sample}/stderr.log",
-        stdout_log=RESULT_DIR / "logs/hostfiltering/SearchHostSpectra/{sample}/stdout.log"
+        stderr_log = RESULT_DIR / "logs/hostfiltering/SearchHostSpectra/{sample}/stderr.log",
+        stdout_log = RESULT_DIR / "logs/hostfiltering/SearchHostSpectra/{sample}/stdout.log"
     params:
         result_dir = str(RESULT_DIR / "{sample}/SpectraFilter"),
         hostname = "host",
@@ -60,9 +60,9 @@ rule RunPeptideShakerHost:
     output: 
         peptide_shaker_psdb = RESULT_DIR / "{sample}/SpectraFilter/host.psdb"
     log:
-        stderr_log=RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/stderr.log",
-        stdout_log=RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/stdout.log",
-        peptide_shaker_log=RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/PeptideShaker.log",
+        stderr_log = RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/stderr.log",
+        stdout_log = RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/stdout.log",
+        peptide_shaker_log = RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/PeptideShaker.log",
     params:
         hostname = "host",
     conda:
@@ -78,8 +78,8 @@ rule SimplePeptideListHost:
     output: 
         peptide_shaker_report = RESULT_DIR / "{sample}/SpectraFilter/host_Default_PSM_Report.txt",
     log:
-        stderr_log=RESULT_DIR / "logs/hostfiltering/SimplePeptideListHost/{sample}/stderr.log",
-        stdout_log=RESULT_DIR / "logs/hostfiltering/SimplePeptideListHost/{sample}/stdout.log"
+        stderr_log = RESULT_DIR / "logs/hostfiltering/SimplePeptideListHost/{sample}/stderr.log",
+        stdout_log = RESULT_DIR / "logs/hostfiltering/SimplePeptideListHost/{sample}/stdout.log"
     params:
         hostname = "host",
         out_dir = str(RESULT_DIR / "{sample}/SpectraFilter")
@@ -97,7 +97,7 @@ rule FilterSpectra:
     output: 
         filtered_mgf = RESULT_DIR / "{sample}/SpectraFilter/Filtered_host.mgf"
     log:
-        stdout_log=RESULT_DIR / "logs/hostfiltering/FilterSpectra/{sample}/stdout.log"
+        stdout_log = RESULT_DIR / "logs/hostfiltering/FilterSpectra/{sample}/stdout.log"
     conda: 
         '../envs/pandas.yml'
     threads: 1
