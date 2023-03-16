@@ -8,6 +8,7 @@ host_filtering:
   peptide_fdr: 1 
   protein_fdr: 1
 
+# TODO
 db_search:
   ref: "resources/Database/refSeqViral.fasta"
   search_engine: "-xtandem"
@@ -21,3 +22,6 @@ ms2rescore:
   RescoreFeatures: '[["searchengine", "ms2pip", "rt"]]' #[["searchengine", "ms2pip", "rt"]],
   RunPercolator: 'true' #boolean
   FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models
+
+taxids:
+  number_of_taxids: 20

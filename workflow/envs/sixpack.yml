@@ -1,0 +1,9 @@
+name: sixpack
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - python=3.9
+  - emboss=6.6.0

@@ -19,9 +19,9 @@ def hash_database(in_file, out_file, seed=18):
     # initialize database
     database = np.empty([sum(1 for _ in open(in_file))])
     # hash protein accessions
-    with open(in_file, 'r') as f:
+    with open(in_file, "r") as f:
         for line_num, line in enumerate(f, 1):
-            database[line_num-1] = mmh3.hash64(line, signed=False, seed=seed)[0]
+            database[line_num - 1] = mmh3.hash64(line, signed=False, seed=seed)[0]
     # save in numpy format
     np.save(out_file, database)
 
