@@ -1,0 +1,2 @@
+sample	mgf	par	host_fasta	host_name
+PXD025130_Sars_CoV_2	resources/mgf_files/PXD025130_Sars_CoV_2.mgf	resources/par_files/PXD025130_Sars_CoV_2.par	resources/Database/PXD025130_Sars_CoV_2/GRCh38_latest_protein.faa	Human
