@@ -10,7 +10,7 @@ host_filtering:
 
 # TODO
 db_search:
-  ref: "resources/Database/refSeqViral.fasta"
+  ref: "resources/Database/viral.1.protein.faa"
   search_engine: "-xtandem"
   psm_fdr: 1
   peptide_fdr: 1 
@@ -24,4 +24,12 @@ ms2rescore:
   FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models
 
 taxids:
-  number_of_taxids: 20
+  number_of_taxids: 25
+
+sixpack:
+  orfminsize: 15
+  additional_parameters: ""
+
+
+SearchGUI: "/home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar" # replace path
+latency-wait: 60
