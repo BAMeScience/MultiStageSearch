@@ -45,11 +45,12 @@ rule SearchHostSpectra:
         psm_fdr = config["host_filtering"]["psm_fdr"],
         peptide_fdr = config["host_filtering"]["peptide_fdr"],
         protein_fdr = config["host_filtering"]["protein_fdr"]
+        # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: workflow.cores / 2
     shell: 
-        "searchgui eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.host_decoy_db} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.hostname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
+        "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.host_decoy_db} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.hostname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule RunPeptideShakerHost:
@@ -65,11 +66,12 @@ rule RunPeptideShakerHost:
         peptide_shaker_log = RESULT_DIR / "logs/hostfiltering/RunPeptideShakerHost/{sample}/PeptideShaker.log",
     params:
         hostname = "host",
+    # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: workflow.cores / 2
     shell:
-        "peptide-shaker eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.hostname} -fasta_file {input.host_decoy_db} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.hostname} -fasta_file {input.host_decoy_db} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
 
 rule SimplePeptideListHost:
@@ -83,11 +85,12 @@ rule SimplePeptideListHost:
     params:
         hostname = "host",
         out_dir = str(RESULT_DIR / "{sample}/SpectraFilter")
+    # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: 1
     shell:
-        "peptide-shaker eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
    
 
 rule FilterSpectra:

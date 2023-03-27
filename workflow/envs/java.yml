@@ -1,0 +1,9 @@
+name: HostFiltering
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - openjdk
+

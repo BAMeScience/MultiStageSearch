@@ -2,7 +2,8 @@ rule AddDecoysRef:
     input: 
         ref = config["db_search"]["ref"],
     output: 
-        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta"
+    # TODO: Make variable for file name
+        ref_decoy_fasta = "resources/Database/viral.1.protein_concatenated_target_decoy.fasta"
     log:
         stderr_log=RESULT_DIR / "logs/FirstSearch/RefDB/stderr.log",
         stdout_log=RESULT_DIR / "logs/FirstSearch/RefDB/stdout.log" 
@@ -15,7 +16,8 @@ rule AddDecoysRef:
 
 rule SearchSpectraAgainstReference:
     input: 
-        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
+        # TODO: Make variable for file name
+        ref_decoy_fasta = "resources/Database/viral.1.protein_concatenated_target_decoy.fasta",
         mgf = SearchDB.get_input_MGF()["mgf"],
         par = PAR_FILE,
     output:  
@@ -30,11 +32,12 @@ rule SearchSpectraAgainstReference:
         psm_fdr = config["db_search"]["psm_fdr"],
         peptide_fdr = config["db_search"]["peptide_fdr"],
         protein_fdr = config["db_search"]["protein_fdr"]
+    # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: workflow.cores / 2
     shell: 
-        "searchgui eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.ref_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr 1 -peptide_fdr 1 -protein_fdr 1 {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
+        "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.ref_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr 1 -peptide_fdr 1 -protein_fdr 1 {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule RunPeptideShakerRef:
@@ -50,11 +53,12 @@ rule RunPeptideShakerRef:
         peptide_shaker_log=RESULT_DIR / "logs/FirstSearch/RunPeptideShakerRef/{sample}/PeptideShaker.log",
     params:
         refname = "ref",
+    # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: workflow.cores / 2
     shell:
-        "peptide-shaker eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.ref} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.ref} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
 
 rule SimplePeptideListRef:
@@ -68,11 +72,12 @@ rule SimplePeptideListRef:
         stdout_log=RESULT_DIR / "logs/FirstSearch/SimplePeptideListRef/{sample}/stdout.log"
     params:
         out_dir = str(RESULT_DIR / "{sample}/FirstSearch")
+    # TODO: Conda variante zum Laufen bekommen
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: 1
     shell:
-        "peptide-shaker eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
    
 rule extractSearchGuiResults:
     input:
