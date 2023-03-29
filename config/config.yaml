@@ -23,13 +23,16 @@ ms2rescore:
   RunPercolator: 'true' #boolean
   FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models
 
-taxids:
+mapping:
   number_of_taxids: 25
 
 sixpack:
-  orfminsize: 15
+  orfminsize: 5
   additional_parameters: ""
 
 
 SearchGUI: "/home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar" # replace path
 latency-wait: 60
+
+final_db_search:
+  extra: "-Xmx8000m" # specify RAM for java env

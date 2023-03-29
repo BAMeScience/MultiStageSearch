@@ -69,7 +69,7 @@ rule RunPeptideShakerHost:
     # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
-    threads: workflow.cores / 2
+    threads: workflow.cores
     shell:
         "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.hostname} -fasta_file {input.host_decoy_db} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
@@ -88,7 +88,7 @@ rule SimplePeptideListHost:
     # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
-    threads: 1
+    threads: workflow.cores
     shell:
         "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
    
