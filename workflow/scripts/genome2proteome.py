@@ -11,11 +11,12 @@ additional_sixpack_params = snakemake.params[2]
 
 with open(concat_fasta, "r") as fasta:
     sequences = fasta.read()
-    sequences = sequences.split("\n\n")
+    d = ">"
+    sequences = [d+e for e in sequences.split(d)][1:]
 
-
+# TODO multithread
 with open(sixpack_temp, "w") as f:
-    for i, sequence in enumerate(sequences[:-1]):
+    for i, sequence in enumerate(sequences):
         if additional_sixpack_params:
             process = subprocess.Popen(
                 [
@@ -51,6 +52,5 @@ with open(sixpack_temp, "w") as f:
             )
         with open(concat_fasta, "w") as fasta:
             for seq in sequences[i:]:
-                # print(seq[:20])
-                fasta.write(seq + "\n\n")
-        time.sleep(1)
+                fasta.write(seq + "\n")
+        time.sleep(1)  # because file system latency
