@@ -1,4 +1,5 @@
 samples: "resources/test_samples.tsv"
+contaminants: "resources/Database/crap.fasta"
 result_dir: "results"
 
 host_filtering:
@@ -24,7 +25,7 @@ ms2rescore:
   FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models
 
 mapping:
-  number_of_taxids: 25
+  number_of_taxids: 15
 
 sixpack:
   orfminsize: 5

@@ -1,10 +1,19 @@
 # from PepGM, edited
 
+rule AddHostandCrap:
+    input:
+        host_fasta = HOST_FASTA,
+        crap = config["contaminants"]
+    output:
+        concat_db = RESULT_DIR / "{sample}/Database/Host_crap.fasta"
+    shell:"cat {input} > {output}"  
+
+
 rule AddDecoysHost:
     input: 
-        host_fasta = HOST_FASTA
+        concat_db = RESULT_DIR / "{sample}/Database/Host_crap.fasta"
     output: 
-        touch(RESULT_DIR / "{sample}/Database/AddDecoysHost.done")
+        decoy_crap_host = RESULT_DIR / "{sample}/Database/Host_crap_concatenated_target_decoy.fasta"
     log:
         stderr_log = RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stderr.log",
         stdout_log = RESULT_DIR / "logs/hostfiltering/HostDB/{sample}/stdout.log" 
@@ -12,26 +21,13 @@ rule AddDecoysHost:
         "../envs/host_filtering.yml"
     threads: 1
     shell: 
-        "searchgui eu.isas.searchgui.cmd.FastaCLI -in {input.host_fasta} -decoy > {log.stdout_log} 2> {log.stderr_log}"
-
-rule MoveHostDecoyDB:
-    input:
-        RESULT_DIR / "{sample}/Database/AddDecoysHost.done",
-    output:
-        moved_host_decoy_fasta = RESULT_DIR / "{sample}/Database/{sample}_protein_concatenated_target_decoy.fasta"
-    params:
-        res_dir = RESULT_DIR,
-        sample_name = "{sample}"
-    threads: 1
-    script:
-        "../scripts/rename_db.py"
-
+        "searchgui eu.isas.searchgui.cmd.FastaCLI -in {input.concat_db} -decoy > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule SearchHostSpectra:
     input: 
         mgf = MGF_FILE,
-        host_decoy_db = RESULT_DIR / "{sample}/Database/{sample}_protein_concatenated_target_decoy.fasta",
+        decoy_crap_host = RESULT_DIR / "{sample}/Database/Host_crap_concatenated_target_decoy.fasta",
         par = PAR_FILE
     output:  
         out_zip = RESULT_DIR / "{sample}/SpectraFilter/host_searchgui_out.zip"
@@ -50,14 +46,14 @@ rule SearchHostSpectra:
         "../envs/java.yml"
     threads: workflow.cores / 2
     shell: 
-        "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.host_decoy_db} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.hostname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
+        "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.decoy_crap_host} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.hostname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule RunPeptideShakerHost:
     input:
         searchgui_zip = RESULT_DIR / "{sample}/SpectraFilter/host_searchgui_out.zip",
         mgf = MGF_FILE,
-        host_decoy_db = RESULT_DIR / "{sample}/Database/{sample}_protein_concatenated_target_decoy.fasta",
+        decoy_crap_host = RESULT_DIR / "{sample}/Database/Host_crap_concatenated_target_decoy.fasta"
     output: 
         peptide_shaker_psdb = RESULT_DIR / "{sample}/SpectraFilter/host.psdb"
     log:
@@ -71,7 +67,7 @@ rule RunPeptideShakerHost:
         "../envs/java.yml"
     threads: workflow.cores
     shell:
-        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.hostname} -fasta_file {input.host_decoy_db} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.hostname} -fasta_file {input.decoy_crap_host} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
 
 rule SimplePeptideListHost:
@@ -102,7 +98,7 @@ rule FilterSpectra:
     log:
         stdout_log = RESULT_DIR / "logs/hostfiltering/FilterSpectra/{sample}/stdout.log"
     conda: 
-        '../envs/pandas.yml'
+        "../envs/pandas.yml"
     threads: 1
     script: 
         "../scripts/host_filtering.py"
