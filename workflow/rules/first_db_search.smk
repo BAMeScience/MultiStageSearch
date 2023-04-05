@@ -1,9 +1,10 @@
+#TODO: make decoy variable
 rule AddDecoysRef:
     input: 
         ref = config["db_search"]["ref"],
     output: 
     # TODO: Make variable for file name
-        ref_decoy_fasta = "resources/Database/viral.1.protein_concatenated_target_decoy.fasta"
+        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta"
     log:
         stderr_log=RESULT_DIR / "logs/FirstSearch/RefDB/stderr.log",
         stdout_log=RESULT_DIR / "logs/FirstSearch/RefDB/stdout.log" 
@@ -17,7 +18,7 @@ rule AddDecoysRef:
 rule SearchSpectraAgainstReference:
     input: 
         # TODO: Make variable for file name
-        ref_decoy_fasta = "resources/Database/viral.1.protein_concatenated_target_decoy.fasta",
+        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
         mgf = SearchDB.get_input_MGF()["mgf"],
         par = PAR_FILE,
     output:  
@@ -44,7 +45,7 @@ rule RunPeptideShakerRef:
     input:
         searchgui_zip = RESULT_DIR / "{sample}/FirstSearch/ref_searchgui_out.zip",
         mgf = SearchDB.get_input_MGF()["mgf"],
-        ref = config["db_search"]["ref"],
+        ref = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
     output: 
         peptide_shaker_psdb = RESULT_DIR / "{sample}/FirstSearch/ref.psdb"
     log:
