@@ -3,11 +3,13 @@ class General:
     def get_input_all(wildcards):
         input_list = []
         input_list += expand(RESULT_DIR / "{sample}/FirstSearch/MS2Rescore/config.json", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/taxids/mapped_taxids.tsv", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/RefFilter/Filtered_ref.mgf", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/taxids/mapped_taxids.tsv", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/RefFilter/Filtered_ref.mgf", sample=list(SAMPLES.index))
         #input_list += expand(RESULT_DIR / "{sample}/Database/concat_proteomes.fasta", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy.fasta", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy.fasta", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/PepGM/config/config.yaml", sample=list(SAMPLES.index))
+        input_list += expand(RESULT_DIR / "{sample}/refSeqViral_Default_PSM_Report.txt", sample=list(SAMPLES.index))
         
         
         #input_list.append(RESULT_DIR / "taxidMapping/accessions_hashed.npy")
