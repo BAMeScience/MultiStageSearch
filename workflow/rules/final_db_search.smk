@@ -18,7 +18,7 @@ rule SearchSpectraAgainstProteomes:
     # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
-    threads: workflow.cores / 2
+    threads: workflow.cores
     shell: 
         "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.proteomes_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr 1 -peptide_fdr 1 -protein_fdr 1 {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
@@ -41,6 +41,7 @@ rule RunPeptideShakerProteomes:
     conda:
         "../envs/java.yml"
     threads: workflow.cores
+    retries: 3 # sometimes there are java exceptions
     shell:
         "java {params.extra} -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.proteomes_decoy_fasta} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 

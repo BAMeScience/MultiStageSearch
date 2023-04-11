@@ -36,8 +36,10 @@ rule AddDecoysProteome:
     log:
         stderr_log = RESULT_DIR / "logs/genome2proteome/proteomeDB/{sample}/stderr.log",
         stdout_log = RESULT_DIR / "logs/genome2proteome/proteomeDB/{sample}/stdout.log" 
+    params:
+        searchgui = config["SearchGUI"],
     conda:
-        "../envs/host_filtering.yml"
+        "../envs/java.yml"
     threads: 1
     shell: 
-        "searchgui eu.isas.searchgui.cmd.FastaCLI -in {input.proteomes} -decoy > {log.stdout_log} 2> {log.stderr_log}"
+        "java -cp {params.searchgui} eu.isas.searchgui.cmd.FastaCLI -in {input.proteomes} -decoy > {log.stdout_log} 2> {log.stderr_log}"
