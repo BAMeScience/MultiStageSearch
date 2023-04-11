@@ -1,5 +1,5 @@
 samples: "resources/test_samples.tsv"
-contaminants: "resources/Database/crap.fasta"
+contaminants: "resources/Database/0602_Universal_Contaminants.fasta"
 result_dir: "results"
 
 host_filtering:
@@ -11,7 +11,7 @@ host_filtering:
 
 # TODO
 db_search:
-  ref: "resources/Database/viral.1.protein.faa"
+  ref: "resources/Database/refSeqViral.fasta"
   search_engine: "-xtandem"
   psm_fdr: 1
   peptide_fdr: 1 
@@ -25,15 +25,18 @@ ms2rescore:
   FragModel: '"HCD"' #fragmentation model used for ms2pip http://compomics.github.io/projects/ms2pip_c#specialized-prediction-models
 
 mapping:
-  number_of_taxids: 15
+  number_of_taxids: 5
 
 sixpack:
-  orfminsize: 5
+  orfminsize: 25 # how many AAs are required for the ORF
   additional_parameters: ""
 
 
-SearchGUI: "/home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar" # replace path
+SearchGUI: "/home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar" # replace path, conda version yields errors
+PeptideShaker: "/home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar" # replace path, conda version yields errors
 latency-wait: 60
 
 final_db_search:
   extra: "-Xmx8000m" # specify RAM for java env
+
+pepgm_path: "/home/jpipart/PepGM"
