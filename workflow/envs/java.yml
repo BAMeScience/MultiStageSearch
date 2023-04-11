@@ -1,4 +1,4 @@
-name: HostFiltering
+name: JavaEnv
 channels:
   - bioconda
   - conda-forge
