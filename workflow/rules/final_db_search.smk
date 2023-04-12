@@ -50,7 +50,6 @@ rule SimplePeptideListProteomes:
     input:
         peptide_shaker_psdb = RESULT_DIR / "{sample}/FinalSearch/proteomes.psdb"
     output: 
-        #TODO hostname varialbe: ResultsDir+SampleName+'/FinalSearch/'+HostName+'.psdb'
         peptide_shaker_report = RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt",
     log:
         stderr_log=RESULT_DIR / "logs/FinalSearch/SimplePeptideListProteomes/{sample}/stderr.log",

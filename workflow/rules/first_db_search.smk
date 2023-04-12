@@ -1,9 +1,7 @@
-#TODO: make decoy variable
 rule AddDecoysRef:
     input: 
         ref = config["db_search"]["ref"],
     output: 
-    # TODO: Make variable for file name
         ref_decoy_fasta = SearchDB.get_output_AddDecoysRef()["ref_decoy_fasta"]
     log:
         stderr_log=RESULT_DIR / "logs/FirstSearch/RefDB/stderr.log",
@@ -19,7 +17,6 @@ rule AddDecoysRef:
 
 rule SearchSpectraAgainstReference:
     input: 
-        # TODO: Make variable for file name
         ref_decoy_fasta = SearchDB.get_output_AddDecoysRef()["ref_decoy_fasta"],
         mgf = SearchDB.get_input_MGF()["mgf"],
         par = PAR_FILE,
@@ -68,8 +65,7 @@ rule RunPeptideShakerRef:
 rule SimplePeptideListRef:
     input:
         peptide_shaker_psdb = RESULT_DIR / "{sample}/FirstSearch/ref.psdb"
-    output: 
-        #TODO hostname varialbe: ResultsDir+SampleName+'/FirstSearch/'+HostName+'.psdb'
+    output:
         peptide_shaker_report = RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt",
     log:
         stderr_log=RESULT_DIR / "logs/FirstSearch/SimplePeptideListRef/{sample}/stderr.log",
