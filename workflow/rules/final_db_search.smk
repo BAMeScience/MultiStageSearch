@@ -15,7 +15,6 @@ rule SearchSpectraAgainstProteomes:
         psm_fdr = config["db_search"]["psm_fdr"],
         peptide_fdr = config["db_search"]["peptide_fdr"],
         protein_fdr = config["db_search"]["protein_fdr"]
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -37,7 +36,6 @@ rule RunPeptideShakerProteomes:
     params:
         refname = "proteomes",
         extra = config["final_db_search"]["extra"]
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -58,7 +56,6 @@ rule SimplePeptideListProteomes:
     params:
         out_dir = str(RESULT_DIR / "{sample}/FinalSearch"),
         extra = config["final_db_search"]["extra"]
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores

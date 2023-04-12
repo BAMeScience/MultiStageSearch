@@ -36,7 +36,6 @@ rule SearchSpectraAgainstReference:
         psm_fdr = config["db_search"]["psm_fdr"],
         peptide_fdr = config["db_search"]["peptide_fdr"],
         protein_fdr = config["db_search"]["protein_fdr"]
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -58,7 +57,6 @@ rule RunPeptideShakerRef:
     params:
         refname = "ref",
         peptideshaker = config["PeptideShaker"],
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -79,7 +77,6 @@ rule SimplePeptideListRef:
     params:
         out_dir = str(RESULT_DIR / "{sample}/FirstSearch"),
         peptideshaker = config["PeptideShaker"],
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores

@@ -44,7 +44,6 @@ rule SearchHostSpectra:
         psm_fdr = config["host_filtering"]["psm_fdr"],
         peptide_fdr = config["host_filtering"]["peptide_fdr"],
         protein_fdr = config["host_filtering"]["protein_fdr"]
-        # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -66,7 +65,6 @@ rule RunPeptideShakerHost:
     params:
         hostname = "host",
         peptideshaker = config["PeptideShaker"],
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
@@ -87,7 +85,6 @@ rule SimplePeptideListHost:
         hostname = "host",
         out_dir = str(RESULT_DIR / "{sample}/SpectraFilter"),
         peptideshaker = config["PeptideShaker"],
-    # TODO: Conda variante zum Laufen bekommen
     conda:
         "../envs/java.yml"
     threads: workflow.cores
