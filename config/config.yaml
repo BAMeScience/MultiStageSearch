@@ -9,7 +9,6 @@ host_filtering:
   peptide_fdr: 1 
   protein_fdr: 1
 
-# TODO
 db_search:
   ref: "resources/Database/refSeqViral.fasta"
   search_engine: "-xtandem"
