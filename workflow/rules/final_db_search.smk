@@ -9,6 +9,7 @@ rule SearchSpectraAgainstProteomes:
         stderr_log=RESULT_DIR / "logs/FinalSearch/SearchSpectraAgainstProteomes/{sample}/stderr.log",
         stdout_log=RESULT_DIR / "logs/FinalSearch/SearchSpectraAgainstProteomes/{sample}/stdout.log"
     params:
+        searchgui = config["SearchGUI"],
         result_dir = str(RESULT_DIR / "{sample}/FinalSearch"),
         refname = "proteomes",
         search_engine = config["db_search"]["search_engine"],
@@ -19,7 +20,7 @@ rule SearchSpectraAgainstProteomes:
         "../envs/java.yml"
     threads: workflow.cores
     shell: 
-        "java -cp /home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.proteomes_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
+        "java -cp {params.searchgui} eu.isas.searchgui.cmd.SearchCLI -spectrum_files {input.mgf} -fasta_file {input.proteomes_decoy_fasta} -output_folder {params.result_dir} -id_params {input.par} -output_default_name {params.refname}_searchgui_out -psm_fdr {params.psm_fdr} -peptide_fdr {params.peptide_fdr} -protein_fdr {params.protein_fdr} {params.search_engine} 1 -threads {threads} > {log.stdout_log} 2> {log.stderr_log}"
 
 
 rule RunPeptideShakerProteomes:
@@ -35,13 +36,14 @@ rule RunPeptideShakerProteomes:
         peptide_shaker_log=RESULT_DIR / "logs/FinalSearch/RunPeptideShakerProteomes/{sample}/PeptideShaker.log",
     params:
         refname = "proteomes",
-        extra = config["final_db_search"]["extra"]
+        extra = config["final_db_search"]["extra"],
+        peptideshaker = config["PeptideShaker"],
     conda:
         "../envs/java.yml"
     threads: workflow.cores
     retries: 3 # sometimes there are java exceptions
     shell:
-        "java {params.extra} -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.proteomes_decoy_fasta} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
+        "java {params.extra} -cp {params.peptideshaker} eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.proteomes_decoy_fasta} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
 
 rule SimplePeptideListProteomes:
@@ -55,12 +57,13 @@ rule SimplePeptideListProteomes:
         stdout_log=RESULT_DIR / "logs/FinalSearch/SimplePeptideListProteomes/{sample}/stdout.log"
     params:
         out_dir = str(RESULT_DIR / "{sample}/FinalSearch"),
-        extra = config["final_db_search"]["extra"]
+        extra = config["final_db_search"]["extra"],
+        peptideshaker = config["PeptideShaker"],
     conda:
         "../envs/java.yml"
     threads: workflow.cores
     shell:
-        "java {params.extra} -cp /home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
+        "java {params.extra} -cp {params.peptideshaker} eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
    
 # rule extractSearchGuiResults:
 #     input:
