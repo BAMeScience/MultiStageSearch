@@ -1,8 +1,7 @@
 name: FetchData
 channels:
-  - bioconda
   - conda-forge
-  - anaconda
+  - bioconda
   - default
 dependencies:
   - python=3.9
