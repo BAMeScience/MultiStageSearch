@@ -38,8 +38,3 @@ include: "rules/concatResults.smk"
 #include: "rules/pepGM.smk"
 
 
-
-#TODO
-# fix conda channel prio
-# conda strict prio is false
-
