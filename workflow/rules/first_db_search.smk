@@ -4,7 +4,7 @@ rule AddDecoysRef:
         ref = config["db_search"]["ref"],
     output: 
     # TODO: Make variable for file name
-        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta"
+        ref_decoy_fasta = SearchDB.get_output_AddDecoysRef()["ref_decoy_fasta"]
     log:
         stderr_log=RESULT_DIR / "logs/FirstSearch/RefDB/stderr.log",
         stdout_log=RESULT_DIR / "logs/FirstSearch/RefDB/stdout.log" 
@@ -20,7 +20,7 @@ rule AddDecoysRef:
 rule SearchSpectraAgainstReference:
     input: 
         # TODO: Make variable for file name
-        ref_decoy_fasta = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
+        ref_decoy_fasta = SearchDB.get_output_AddDecoysRef()["ref_decoy_fasta"],
         mgf = SearchDB.get_input_MGF()["mgf"],
         par = PAR_FILE,
     output:  
@@ -47,7 +47,7 @@ rule RunPeptideShakerRef:
     input:
         searchgui_zip = RESULT_DIR / "{sample}/FirstSearch/ref_searchgui_out.zip",
         mgf = SearchDB.get_input_MGF()["mgf"],
-        ref = "resources/Database/refSeqViral_concatenated_target_decoy.fasta",
+        ref_decoy_fasta = SearchDB.get_output_AddDecoysRef()["ref_decoy_fasta"],
     output: 
         peptide_shaker_psdb = RESULT_DIR / "{sample}/FirstSearch/ref.psdb"
     log:
@@ -62,7 +62,7 @@ rule RunPeptideShakerRef:
     threads: workflow.cores
     retries: 3 # sometimes there are java exceptions
     shell:
-        "java -cp {params.peptideshaker} eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.ref} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
+        "java -cp {params.peptideshaker} eu.isas.peptideshaker.cmd.PeptideShakerCLI -reference {params.refname} -fasta_file {input.ref_decoy_fasta} -identification_files {input.searchgui_zip} -spectrum_files {input.mgf} -out {output.peptide_shaker_psdb} -threads {threads} -log {log.peptide_shaker_log} > {log.stdout_log} 2> {log.stderr_log}" 
 
 
 rule SimplePeptideListRef:
