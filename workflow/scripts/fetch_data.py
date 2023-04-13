@@ -6,9 +6,13 @@ import time
 
 mapped_taxids = snakemake.input[0]
 concat_fasta = snakemake.output[0]
-#number_taxids = snakemake.params[0]
+number_taxids = snakemake.params[0]
+weight_diff = snakemake.params[1]
 stderr_log = snakemake.log[0]
 stdout_log = snakemake.log[1]
+
+# mapped_taxids = "/home/jpipart/project/MultiStageSearch/results/PXD025130_Sars_CoV_2/taxids/top_scoring_taxids.tsv"
+# number_taxids = 5
 
 # with open(stderr_log, "w") as sys.stderr:
 #     with open(stdout_log, "w") as sys.stdout:
@@ -16,6 +20,25 @@ stdout_log = snakemake.log[1]
 taxid_df = pd.read_csv(mapped_taxids, sep="\t", header=0, index_col=False)
 #taxids = taxid_df["taxid"].value_counts()[:number_taxids]
 taxids = taxid_df["taxid"].to_list()
+relevant_taxids = taxids[:number_taxids]
+taxids_to_query = []
+
+for i in range(len(relevant_taxids)):
+    if i == 0:
+        taxids_to_query.append(relevant_taxids[i])
+    else:
+        previous_taxid = taxid_df.loc[taxid_df["taxid"] == relevant_taxids[i-1]]
+        previous_taxid_score = previous_taxid["weight"].values[0]
+        current_taxid = taxid_df.loc[taxid_df["taxid"] == relevant_taxids[i]]
+        current_taxid_score = current_taxid["weight"].values[0]
+
+        if previous_taxid_score <= (current_taxid_score * weight_diff):
+            taxids_to_query.append(relevant_taxids[i])
+        else:
+            break
+
+print("TaxIDs to query: ", taxids_to_query)
+
 
 genome_ids = []
 for taxid in taxids:

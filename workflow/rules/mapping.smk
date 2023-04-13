@@ -4,12 +4,10 @@ rule mapTaxIDs:
         taxIDs = RESULT_DIR / "taxidMapping/protacc2taxids_virus.txt"
     output:
         all_mapped_taxIDs = RESULT_DIR / "{sample}/taxids/mapped_taxids.txt",
-        top_scoring_taxIDs = RESULT_DIR / "{sample}/taxids/top_scoring_taxids.tsv",
+        taxID_scores = RESULT_DIR / "{sample}/taxids/taxid_scores.tsv",
     log:
-        stderr_log = RESULT_DIR / "logs/taxids/getTargets/{sample}/stderr.log",
-        stdout_log = RESULT_DIR / "logs/taxids/getTargets/{sample}/stdout.log"
-    params:
-        number_taxids = config["mapping"]["number_of_taxids"]
+        stderr_log = RESULT_DIR / "logs/taxids/mapTaxIDs/{sample}/stderr.log",
+        stdout_log = RESULT_DIR / "logs/taxids/mapTaxIDs/{sample}/stdout.log"
     conda: 
         "../envs/mapping.yml"
     script: 

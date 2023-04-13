@@ -17,24 +17,13 @@ def mapTaxIDs(in_file, taxids, out_file):
     merged_df.to_csv(out_file, sep="\t", header=["accession", "weight", "psmid", "taxid"])
     return merged_df
 
-#TODO Param um scoring mit mean, median oder max number zu machen
-def score(df, num, out_file):
-    """
-    Score taxids according to their confidence and select the ones which are top scoring.
-    :param df: df, contains protein 2 taxid mapping and the respective weights
-    :param taxids: lst, mapped taxids
-    :param output_path: str, output path
-    :param subset: int, top <subset> scoring taxids
-    """
-    #df['taxid'] = taxids
+
+# TODO Param um scoring mit mean, median oder max number zu machen, ist jetzt die ersten x + weight diff
+def score(df, out_file):
+
     df_score = df.groupby('taxid')['weight'].sum().reset_index()
     df_score = df_score.sort_values(by=['weight'], ascending=False)
-    df_score = df_score[:num]
     df_score.to_csv(out_file, index=False, sep="\t")
-    #threshold = df_score.weight.mean() # diff to pepgm
-
-    #top_scoring_df = df_score.loc[df_score["weight"] >= threshold]
-    #top_scoring_df.to_csv(out_file, index=False, sep="\t")
 
 
 def main():
@@ -42,10 +31,10 @@ def main():
     taxids = snakemake.input[1]
     mapped_taxids = snakemake.output[0]
     top_scoring = snakemake.output[1]
-    number_taxids = snakemake.params[0]
 
     merged_df = mapTaxIDs(in_file=raw_report, taxids=taxids, out_file=mapped_taxids)
-    score(df=merged_df, num=number_taxids, out_file=top_scoring)
+    score(df=merged_df, out_file=top_scoring)
+
 
 if __name__ == "__main__":
     main()
