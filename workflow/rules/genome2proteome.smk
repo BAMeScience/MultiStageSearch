@@ -1,6 +1,6 @@
 rule genome2Proteome:
     input: 
-        concat_taxid_genomes = RESULT_DIR / "{sample}/Database/concat_taxid_genomes.fasta"
+        concat_taxid_genomes = RESULT_DIR / "{sample}/FetchData/concat_taxid_genomes.fasta"
     output:
         touch(RESULT_DIR / "{sample}/sixpack/genome2Proteome.done"),
         sixpack_temp = RESULT_DIR / "{sample}/sixpack/sixpack_temp.txt"
