@@ -79,8 +79,6 @@ if num_seq == 0:
     sequences = Entrez.efetch(db="nucleotide", id=genome_ids, rettype="fasta", retmax=1000).read()
     num_seq = sequences.count(">")
     print(f"There were {num_seq} genome sequences found.")
-    with open(concat_fasta, "w") as f:
-        f.write(sequences)
 
 
 with open(concat_fasta, "w") as f:
