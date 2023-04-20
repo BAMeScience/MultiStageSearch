@@ -9,7 +9,9 @@ rule getAccessionsToQuery:
     params:
         number_taxids = config["mapping"]["number_of_taxids"],
         weight_diff = config["mapping"]["max_weight_differences"],
-        max_number_accessions = config["fetchData"]["max_number_accessions"]
+        max_number_accessions = config["fetchData"]["max_number_accessions"],
+        APIMail = config["Entrez"]["APIMail"],
+        APIKey = config["Entrez"]["APIKey"],
     conda:
         "../envs/fetch_data.yml"
     threads: 1
@@ -29,6 +31,8 @@ rule fetchStrainGenomes:
     params:
         number_taxids = config["mapping"]["number_of_taxids"],
         weight_diff = config["mapping"]["max_weight_differences"],
+        APIMail = config["Entrez"]["APIMail"],
+        APIKey = config["Entrez"]["APIKey"],
     conda:
         "../envs/fetch_data.yml"
     threads: 1

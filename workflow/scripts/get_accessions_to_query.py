@@ -3,11 +3,22 @@ import pandas as pd
 
 mapped_taxids = snakemake.input[0]
 all_genbank_accessions = snakemake.output[0]
+
 number_taxids = snakemake.params[0]
 weight_diff = snakemake.params[1]
 max_number_accessions = snakemake.params[2]
+
+APImail = snakemake.params[3]
+APIkey = snakemake.params[4]
+
+
 stderr_log = snakemake.log[0]
 stdout_log = snakemake.log[1]
+
+
+if APIkey and APImail:
+    Entrez.email = APImail
+    Entrez.api_key = APIkey
 
 # mapped_taxids = "/home/jpipart/project/MultiStageSearch/results/PXD025130_Sars_CoV_2/taxids/top_scoring_taxids.tsv"
 # number_taxids = 5
@@ -41,7 +52,7 @@ accessions = []
 for taxon_id in taxids_to_query:
 # Use Entrez to search for the virus strains in Taxonomy database
     search_query = f"txid{taxon_id}[Organism]"
-    search_handle = Entrez.esearch(db="nucleotide", term=search_query, retmax=max_number_accessions)
+    search_handle = Entrez.esearch(db="nucleotide", term=search_query, retmax=max_number_accessions, sort="Sequence Length")
 
     # Get the list of matching taxon IDs
     taxon_id_list = Entrez.read(search_handle)["IdList"]

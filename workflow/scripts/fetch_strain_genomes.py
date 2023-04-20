@@ -11,7 +11,14 @@ mapped_taxids = snakemake.input[2]
 number_taxids = snakemake.params[0]
 weight_diff = snakemake.params[1]
 
+APImail = snakemake.params[2]
+APIkey = snakemake.params[3]
+
 concat_fasta = snakemake.output[0]
+
+if APIkey and APImail:
+    Entrez.email = APImail
+    Entrez.api_key = APIkey
 
 
 genbank_accessions = pd.read_csv(genbank, sep="\t", header=0, names=["accession", "name", "others"], index_col=False)
