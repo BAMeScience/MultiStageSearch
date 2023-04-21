@@ -38,3 +38,21 @@ rule fetchStrainGenomes:
     threads: 1
     script:
         "../scripts/fetch_strain_genomes.py"
+
+rule get_strain_names:
+    input:
+        peptide_shaker_report = RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt",
+    output:
+        accessions_mapping = RESULT_DIR / "{sample}/taxids/strain_name_mappings.tsv"
+    log:
+        stderr_log=RESULT_DIR / "logs/FetchData/{sample}/get_strain_names/stderr.log",
+        stdout_log=RESULT_DIR / "logs/FetchData/{sample}/get_strain_names/stdout.log"
+    params:
+        number_taxids = config["mapping"]["number_of_strains"],
+        APIMail = config["Entrez"]["APIMail"],
+        APIKey = config["Entrez"]["APIKey"],
+    conda:
+        "../envs/fetch_data.yml"
+    threads: 1
+    script:
+        "../scripts/get_species_strain.py"

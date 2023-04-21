@@ -27,6 +27,7 @@ ms2rescore:
 mapping:
   number_of_taxids: 5
   max_weight_differences: 2 # how many times should the value be bigger to not consider lower values, ex. 10 is 5 times bigger than 2, so the taxid with weight 2 is not considered for further analysis
+  number_of_strains: 10
 
 fetchData:
   max_number_accessions: 100

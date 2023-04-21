@@ -10,8 +10,7 @@ class General:
         input_list += expand(RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt", sample=list(SAMPLES.index))
         #input_list += expand(RESULT_DIR / "{sample}/PepGM/config/config.yaml", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/refSeqViral_Default_PSM_Report.txt", sample=list(SAMPLES.index))
-        
-        
+        input_list += expand(RESULT_DIR / "{sample}/taxids/strain_name_mappings.tsv", sample=list(SAMPLES.index))
         #input_list.append(RESULT_DIR / "taxidMapping/accessions_hashed.npy")
 
         return input_list
