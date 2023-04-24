@@ -1,6 +1,6 @@
 rule SearchSpectraAgainstProteomes:
     input: 
-        proteomes_decoy_fasta = RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy.fasta",
+        proteomes_decoy_fasta = RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy_unique.fasta",
         mgf = RESULT_DIR / "{sample}/RefFilter/Filtered_ref.mgf",
         par = PAR_FILE,
     output:  
@@ -27,7 +27,7 @@ rule RunPeptideShakerProteomes:
     input:
         searchgui_zip = RESULT_DIR / "{sample}/FinalSearch/proteomes_searchgui_out.zip",
         mgf = RESULT_DIR / "{sample}/RefFilter/Filtered_ref.mgf",
-        proteomes_decoy_fasta = RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy.fasta"
+        proteomes_decoy_fasta = RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy_unique.fasta",
     output: 
         peptide_shaker_psdb = RESULT_DIR / "{sample}/FinalSearch/proteomes.psdb"
     log:
