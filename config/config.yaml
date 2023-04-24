@@ -30,7 +30,8 @@ mapping:
   number_of_strains: 10
 
 fetchData:
-  max_number_accessions: 100
+  max_number_accessions: 200
+  sequence_length_diff: 2
 
 sixpack:
   orfminsize: 25 # how many AAs are required for the ORF
