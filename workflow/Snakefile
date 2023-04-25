@@ -35,6 +35,6 @@ include: "rules/fetch_data.smk"
 include: "rules/genome2proteome.smk"
 include: "rules/final_db_search.smk"
 include: "rules/concatResults.smk"
-#include: "rules/pepGM.smk"
+include: "rules/plots.smk"
 
 
