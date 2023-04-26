@@ -34,6 +34,7 @@ rule fetchStrainGenomes:
         weight_diff = config["mapping"]["max_weight_differences"],
         sequence_length_diff = config["fetchData"]["sequence_length_diff"],
         max_number_accessions = config["fetchData"]["max_number_accessions"],
+        NCBI = config["fetchData"]["use_NCBI_Taxa"]
     conda:
         "../envs/fetch_data.yml"
     threads: 1
