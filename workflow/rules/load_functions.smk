@@ -7,11 +7,11 @@ class General:
         #input_list += expand(RESULT_DIR / "{sample}/RefFilter/Filtered_ref.mgf", sample=list(SAMPLES.index))
         #input_list += expand(RESULT_DIR / "{sample}/Database/concat_proteomes.fasta", sample=list(SAMPLES.index))
         #input_list += expand(RESULT_DIR / "{sample}/Database/proteomes_concatenated_target_decoy.fasta", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt", sample=list(SAMPLES.index))
         #input_list += expand(RESULT_DIR / "{sample}/PepGM/config/config.yaml", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/refSeqViral_Default_PSM_Report.txt", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/FetchData/strain_accessions.tsv", sample=list(SAMPLES.index))
-        input_list += expand(RESULT_DIR / "{sample}/taxids/strain_name_mappings.tsv", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/FetchData/strain_accessions.tsv", sample=list(SAMPLES.index))
+        #input_list += expand(RESULT_DIR / "{sample}/taxids/strain_name_counts.tsv", sample=list(SAMPLES.index))
 
         # Plots
         input_list += expand(RESULT_DIR / "{sample}/Plots/{sample}_strain_bar_plot.png", sample=list(SAMPLES.index))

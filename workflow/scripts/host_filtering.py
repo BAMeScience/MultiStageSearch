@@ -2,11 +2,6 @@
 
 import pandas as pd
 
-mgf = snakemake.input[0]
-psm_report = snakemake.input[1]
-out_file = snakemake.output[0]
-log_file = snakemake.log[0]
-
 
 def getSpectraNames(report):
 
@@ -21,7 +16,7 @@ def getSpectraNames(report):
     return spectrumNames
 
 
-def FilterMGF(SpectraToFilter, SpectrumFile, output):
+def FilterMGF(SpectraToFilter, SpectrumFile, out_file, log_file):
 
     """
     filter spectra with title provided in a list from .mgf file
@@ -52,8 +47,13 @@ def FilterMGF(SpectraToFilter, SpectrumFile, output):
 
 
 def main():
+    mgf = snakemake.input[0]
+    psm_report = snakemake.input[1]
+    out_file = snakemake.output[0]
+    log_file = snakemake.log[0]
+
     FilterList = getSpectraNames(psm_report)
-    FilterMGF(FilterList, mgf, out_file)
+    FilterMGF(FilterList, mgf, out_file, log_file)
 
 
 if __name__ == "__main__":

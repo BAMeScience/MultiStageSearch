@@ -5,17 +5,19 @@ import matplotlib.pyplot as plt
 def CreateStrainBarPlots(in_file, out_file):
     df = pd.read_csv(in_file, delimiter="\t")
 
-    df["strain"] = df["strain"].astype(str)
+    df['strain_isolate'] = df['strain'].fillna('') + '_' + df['isolate'].fillna('')
+    df['strain_isolate'] = df['strain_isolate'].str.strip('_')
+
     counts = df["counts"]
-    strain = df["strain"]
+    strain_isolate = df['strain_isolate']
 
     fig, ax = plt.subplots()
-    ax.bar(strain, counts)
+    ax.bar(strain_isolate, counts)
 
     # Add labels and title
-    ax.set_xlabel("Strain")
+    ax.set_xlabel("Strain") 
     ax.set_ylabel("Counts")
-    ax.set_title("Bar Plot of Counts vs Strain")
+    ax.set_title("Bar Plot of Counts vs Strain/Isolate")
 
     plt.xticks(rotation=90)
     plt.savefig(out_file, dpi=300, bbox_inches="tight")
@@ -52,7 +54,12 @@ def CreateProportionsPieChart(first_search, final_search, out_file):
     num_entries = [len(report_df_1), len(report_df_2)]
     labels = ['First Search', 'Final Search']
 
-    plt.pie(num_entries, labels=labels, autopct='%1.1f%%')
+    def percent_and_amount(x):
+        amount = int(round(x/100.0 * sum(num_entries), 0))
+        p = '{:.1f}%  ({:d})'.format(x, amount)
+        return p
+    
+    plt.pie(num_entries, labels=labels, autopct=percent_and_amount)
     plt.title('Number of PSMs')
     plt.savefig(out_file, dpi=300, bbox_inches="tight")
     plt.clf()

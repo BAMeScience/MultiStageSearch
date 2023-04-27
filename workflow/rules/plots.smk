@@ -1,6 +1,6 @@
 rule createPlots:
     input:
-        strain_mappings = RESULT_DIR / "{sample}/taxids/strain_name_mappings.tsv",
+        strain_mappings = RESULT_DIR / "{sample}/taxids/strain_name_counts.tsv",
         taxID_scores = RESULT_DIR / "{sample}/taxids/taxid_scores.tsv",
         frist_search = RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt",
         final_search = RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt",

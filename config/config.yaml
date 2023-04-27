@@ -1,6 +1,5 @@
 samples: "resources/test_samples.tsv"
 contaminants: "resources/Database/0602_Universal_Contaminants.fasta"
-genbank_accessions: "resources/Database/Virus_list_complete_genomes.tsv"
 result_dir: "results"
 
 host_filtering:
@@ -17,6 +16,7 @@ db_search:
   peptide_fdr: 1 
   protein_fdr: 1
 
+# not finished
 ms2rescore:
   RescorePipeline: '"tandem"' # any of ['infer', 'pin', 'tandem', 'maxquant', 'msgfplus', 'peptideshaker']
   RescoreFeatures: '[["searchengine", "ms2pip", "rt"]]' #[["searchengine", "ms2pip", "rt"]],
@@ -31,19 +31,21 @@ mapping:
 fetchData:
   max_number_accessions: 200
   sequence_length_diff: 2
+  max_sequence_length: 250000 # sequence longer than this value are not considered (most likely whole genome shotgut sequencing data, not clean genome sequence)
   use_NCBI_Taxa: True
 
 sixpack:
   orfminsize: 25 # how many AAs are required for the ORF
   additional_parameters: ""
 
-SearchGUI: "/home/jpipart/project/SearchGUI-4.2.7/SearchGUI-4.2.7.jar" # replace path, conda version yields errors
-PeptideShaker: "/home/jpipart/project/PeptideShaker-2.2.22/PeptideShaker-2.2.22.jar" # replace path, conda version yields errors
+SearchGUI: "/home/jpipart/project/SearchGUI-4.2.9/SearchGUI-4.2.9.jar" # replace path, conda version yields errors
+PeptideShaker: "/home/jpipart/project/PeptideShaker-2.2.23/PeptideShaker-2.2.23.jar" # replace path, conda version yields errors
 latency-wait: 60
 
 final_db_search:
   extra: "-Xmx8000m" # specify RAM for java env
 
+# not finished
 pepgm_path: "/home/jpipart/PepGM"
 
 Entrez:
