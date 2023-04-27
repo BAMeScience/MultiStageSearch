@@ -8,9 +8,10 @@ counter = 0
 for record in SeqIO.parse(in_file, "fasta"):
     counter += 1
     if record.seq not in sequences:
-        sequences[record.seq] = record.id
+        sequences[record.seq] = record.id.split(" ")[0]
     else:
-        sequences[record.seq] += f",{record.id}"
+        r = record.id.split(" ")[0]
+        sequences[record.seq] += f",{r}"
 
 print(f"Number of sequences: {counter}")
 print(f"Number of unique sequences: {len(sequences)}")
