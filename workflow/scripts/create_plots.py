@@ -2,14 +2,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-def CreateStrainBarPlots(in_file, out_file):
+def CreateStrainCountBarPlot(in_file, out_file):
     df = pd.read_csv(in_file, delimiter="\t")
 
-    df['strain_isolate'] = df['strain'].fillna('') + '_' + df['isolate'].fillna('')
-    df['strain_isolate'] = df['strain_isolate'].str.strip('_')
+    df["strain"] = df["strain"].astype(str)
+    df["isolate"] = df["isolate"].astype(str)
+    df["strain_isolate"] = df["strain"].replace("nan", "") + "_" + df["isolate"].replace("nan", "")
+    df["strain_isolate"] = df["strain_isolate"].str.strip("_")
+    df['strain_isolate'] = df["strain_isolate"].replace("", "NaN")
 
     counts = df["counts"]
-    strain_isolate = df['strain_isolate']
+    strain_isolate = df["strain_isolate"]
 
     fig, ax = plt.subplots()
     ax.bar(strain_isolate, counts)
@@ -18,6 +21,31 @@ def CreateStrainBarPlots(in_file, out_file):
     ax.set_xlabel("Strain") 
     ax.set_ylabel("Counts")
     ax.set_title("Bar Plot of Counts vs Strain/Isolate")
+
+    plt.xticks(rotation=90)
+    plt.savefig(out_file, dpi=300, bbox_inches="tight")
+    plt.clf()
+
+
+def CreateStrainConfidenceBarPlot(in_file, out_file):
+    df = pd.read_csv(in_file, delimiter="\t")
+
+    df["strain"] = df["strain"].astype(str)
+    df["isolate"] = df["isolate"].astype(str)
+    df["strain_isolate"] = df["strain"].replace("nan", "") + "_" + df["isolate"].replace("nan", "")
+    df["strain_isolate"] = df["strain_isolate"].str.strip("_")
+    df['strain_isolate'] = df["strain_isolate"].replace("", "NaN")
+
+    mean_confidence = df["mean_confidence"]
+    strain_isolate = df["strain_isolate"]
+
+    fig, ax = plt.subplots()
+    ax.bar(strain_isolate, mean_confidence)
+
+    # Add labels and title
+    ax.set_xlabel("Strain") 
+    ax.set_ylabel("Mean Confidence")
+    ax.set_title("Bar Plot of Mean Confidence vs Strain/Isolate")
 
     plt.xticks(rotation=90)
     plt.savefig(out_file, dpi=300, bbox_inches="tight")
@@ -52,15 +80,15 @@ def CreateProportionsPieChart(first_search, final_search, out_file):
     report_df_2 = df2.explode("ORF", ignore_index=True)
 
     num_entries = [len(report_df_1), len(report_df_2)]
-    labels = ['First Search', 'Final Search']
+    labels = ["First Search", "Final Search"]
 
     def percent_and_amount(x):
         amount = int(round(x/100.0 * sum(num_entries), 0))
-        p = '{:.1f}%  ({:d})'.format(x, amount)
+        p = "{:.1f}%  ({:d})".format(x, amount)
         return p
     
     plt.pie(num_entries, labels=labels, autopct=percent_and_amount)
-    plt.title('Number of PSMs')
+    plt.title("Number of PSMs")
     plt.savefig(out_file, dpi=300, bbox_inches="tight")
     plt.clf()
 
@@ -71,10 +99,10 @@ def CreateConfidenceHistogram(in_file, out_file):
     df["Proteins"] = df.Proteins.apply(lambda x: x.split(","))
     exploded_df = df.explode("Proteins", ignore_index=True)
 
-    plt.hist(exploded_df['Confidence [%]'], bins=20)
-    plt.xlabel('Confidence')
-    plt.ylabel('Count')
-    plt.title('Confidence Histogram')
+    plt.hist(exploded_df["Confidence [%]"], bins=20)
+    plt.xlabel("Confidence")
+    plt.ylabel("Count")
+    plt.title("Confidence Histogram")
     plt.savefig(out_file, dpi=300, bbox_inches="tight")
     plt.clf()
 
@@ -85,13 +113,15 @@ def main():
     frist_search = snakemake.input[2]
     final_search = snakemake.input[3]
 
-    strain_bar_plot = snakemake.output[0]
-    taxIdScores_bar_plot = snakemake.output[1]
-    proportions_pie_chart = snakemake.output[2]
-    first_search_confidence_histogram = snakemake.output[3]
-    final_search_confidence_histogram = snakemake.output[4]
+    strain_counts_bar_plot = snakemake.output[0]
+    strain_conf_bar_plot = snakemake.output[1]
+    taxIdScores_bar_plot = snakemake.output[2]
+    proportions_pie_chart = snakemake.output[3]
+    first_search_confidence_histogram = snakemake.output[4]
+    final_search_confidence_histogram = snakemake.output[5]
 
-    CreateStrainBarPlots(strain_mappings, strain_bar_plot)
+    CreateStrainCountBarPlot(strain_mappings, strain_counts_bar_plot)
+    CreateStrainConfidenceBarPlot(strain_mappings, strain_conf_bar_plot)
     CreateTaxIdScoresBarPlot(taxID_scores, taxIdScores_bar_plot)
     CreateProportionsPieChart(frist_search, final_search, proportions_pie_chart)
     CreateConfidenceHistogram(frist_search, first_search_confidence_histogram)

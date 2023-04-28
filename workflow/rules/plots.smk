@@ -5,7 +5,8 @@ rule createPlots:
         frist_search = RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt",
         final_search = RESULT_DIR / "{sample}/FinalSearch/proteomes_Default_PSM_Report.txt",
     output:
-        strain_bar_plot = RESULT_DIR / "{sample}/Plots/{sample}_strain_bar_plot.png",
+        strain_counts_bar_plot = RESULT_DIR / "{sample}/Plots/{sample}_strain_counts_bar_plot.png",
+        strain_conf_bar_plot = RESULT_DIR / "{sample}/Plots/{sample}_strain_conf_bar_plot.png",
         taxIdScores_bar_plot = RESULT_DIR / "{sample}/Plots/{sample}_taxIdScores_bar_plot.png",
         proportions_pie_chart = RESULT_DIR / "{sample}/Plots/{sample}_proportions_pie_chart.png",
         first_search_confidence_histogram = RESULT_DIR / "{sample}/Plots/{sample}_first_search_confidence_histogram.png",
