@@ -31,7 +31,7 @@ mapping:
 fetchData:
   max_number_accessions: 200
   sequence_length_diff: 2
-  max_sequence_length: 250000 # sequence longer than this value are not considered (most likely whole genome shotgut sequencing data, not clean genome sequence)
+  max_sequence_length: 180000 # sequence longer than this value are not considered (most likely whole genome shotgut sequencing data, not clean genome sequence)
   use_NCBI_Taxa: True
 
 sixpack:
