@@ -2,7 +2,7 @@ class General:
     @staticmethod
     def get_input_all(wildcards):
         input_list = []
-        input_list += expand(RESULT_DIR / "{sample}/refSeqViral_Default_PSM_Report.txt", sample=list(SAMPLES.index))
+        input_list += expand(RESULT_DIR / "{sample}/concat_PSM_Report.txt", sample=list(SAMPLES.index))
         # Plots
         input_list += expand(RESULT_DIR / "{sample}/Plots/{sample}_strain_counts_bar_plot.png", sample=list(SAMPLES.index))
         input_list += expand(RESULT_DIR / "{sample}/Plots/{sample}_strain_conf_bar_plot.png", sample=list(SAMPLES.index))
