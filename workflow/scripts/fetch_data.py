@@ -64,8 +64,6 @@ def fetchDataNCBI(taxids_to_query, max_number_accessions, max_sequence_length, s
         print(f"Querying for TaxId: {taxid}")
         descendants = ncbi.get_descendant_taxa(taxid)
         descendant_names = ncbi.translate_to_names(descendants)
-        # test
-        descendant_names = [name.split["/"][1:] for name in descendant_names]
         
         for name in descendant_names:
             search_query = f"{name}"
