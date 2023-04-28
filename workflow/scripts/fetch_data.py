@@ -4,17 +4,20 @@ from Bio import Entrez, SeqIO
 
 
 def fetchGenomes(all_records, taxon_id_list, max_sequence_length, sequence_length_diff):
+    used_seqs = 0
     for id in range(len(taxon_id_list)):
-            handle = Entrez.efetch(db="nucleotide", id=taxon_id_list[id], rettype="gb", retmode="text")
-            record = SeqIO.read(handle, "genbank")
-            print(f"{id+1}/max{len(taxon_id_list)}; Sequence ID:", taxon_id_list[id], "Sequence Lenght:", len(record.seq))
-            if len(record.seq) > max_sequence_length:
-                print(f"Sequence with ID {taxon_id_list[id]} is longer than allowed. It will be skipped!")
-                continue
-            elif (id > 0) and (len(all_records[id-1].seq) >= (len(record.seq) * sequence_length_diff)):
-                print("Abort query here since the difference in sequence length is too big!")
-                break
+        handle = Entrez.efetch(db="nucleotide", id=taxon_id_list[id], rettype="gb", retmode="text")
+        record = SeqIO.read(handle, "genbank")
+        print(f"{id+1}/max{len(taxon_id_list)}; Sequence ID:", taxon_id_list[id], "Sequence Lenght:", len(record.seq))
+        if len(record.seq) > max_sequence_length:
+            print(f"Sequence with ID {taxon_id_list[id]} is longer than allowed. It will be skipped!")                
+            continue
+        elif (used_seqs > 0) and (len(all_records[used_seqs-1].seq) >= (len(record.seq) * sequence_length_diff)):
+            print("Abort query here since the difference in sequence length is too big!")
+            break
+        else:
             all_records.append(record)
+            used_seqs += 1
     return all_records
 
 
@@ -51,7 +54,10 @@ def fetchData(taxids_to_query, max_number_accessions, max_sequence_length, seque
         search_handle = Entrez.esearch(db="nucleotide", term=search_query, retmax=max_number_accessions, sort="Sequence Length")
         taxon_id_list = Entrez.read(search_handle)["IdList"]
         
-        all_records = fetchGenomes(all_records, taxon_id_list, max_sequence_length, sequence_length_diff)
+        try:
+            all_records = fetchGenomes(all_records, taxon_id_list, max_sequence_length, sequence_length_diff)
+        except TypeError:
+            print(f"No Sequences found for {taxid}!")
     return all_records
 
 
@@ -71,7 +77,10 @@ def fetchDataNCBI(taxids_to_query, max_number_accessions, max_sequence_length, s
             search_handle = Entrez.esearch(db="nucleotide", term=search_query, retmax=max_number_accessions, sort="Sequence Length")
             taxon_id_list = Entrez.read(search_handle)["IdList"]
             
-            all_records = fetchGenomes(all_records, taxon_id_list, max_sequence_length, sequence_length_diff)
+            try:
+                all_records = fetchGenomes(all_records, taxon_id_list, max_sequence_length, sequence_length_diff)
+            except TypeError:
+                print(f"No Sequences found for {name}!")
     return all_records
 
 
