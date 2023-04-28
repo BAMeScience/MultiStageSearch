@@ -108,12 +108,12 @@ rule createMS2RescoreConfig:
     script:
         "../scripts/ms2rescore_config.py"
 
+# TODO
 # rule RunMS2Rescore:
 #     input:
 #         mgf = SearchDB.get_input_MGF()["mgf"],
 #         tandem_xml = RESULT_DIR / "{sample}/FirstSearch/Filtered_host.t.xml.gz"
 #     output: 
-#         #TODO hostname varialbe: ResultsDir+SampleName+'/FirstSearch/'+HostName+'.psdb'
 #         ms2rescore_out = RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt",
 #     log:
 #         stderr_log=RESULT_DIR / "logs/FirstSearch/RunMS2Rescore/{sample}/stderr.log",

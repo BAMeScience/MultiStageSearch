@@ -1,3 +1,4 @@
+# TODO
 import os
 
 mgf_file = snakemake.input[0]
@@ -20,7 +21,6 @@ ref_name = "".join(ref_name[:-1])
 
 sci_host_name = f'"{host_name}"'
 
-#print(sample_name, host_name)
 print(ref_name)
 
 with open(out_file, "w") as out_f:
@@ -35,7 +35,7 @@ with open(out_file, "w") as out_f:
     out_f.write("AddHostandCrapToDB: True\n\n")
     out_f.write(f"SamplePath: '{mgf_file}'\n")
     out_f.write(f"ParametersFile: '{par_file}'\n")
-    out_f.write("DataDir: 'resources/SampleData/'\n")  # TODO
+    out_f.write("DataDir: 'resources/SampleData/'\n")
     out_f.write("DatabaseDir: 'resources/Database/'\n")
     out_f.write("PeptideShaker: '/path/to/bin/PeptideShaker-2.2.16/PeptideShaker-2.2.16.jar'\n")
     out_f.write("SearchGUI: '/path/to/bin/SearchGUI-4.1.23/SearchGUI-4.1.23.jar'\n")

@@ -18,7 +18,6 @@ def mapTaxIDs(in_file, taxids, out_file):
     return merged_df
 
 
-# TODO Param um scoring mit mean, median oder max number zu machen, ist jetzt die ersten x + weight diff
 def score(df, out_file):
 
     df_score = df.groupby('taxid')['weight'].sum().reset_index()

@@ -63,7 +63,8 @@ rule SimplePeptideListProteomes:
     threads: workflow.cores
     shell:
         "java {params.extra} -cp {params.peptideshaker} eu.isas.peptideshaker.cmd.ReportCLI -in {input.peptide_shaker_psdb} -out_reports {params.out_dir} -reports 3 > {log.stdout_log} 2> {log.stderr_log}" 
-   
+
+# TODO
 # rule extractSearchGuiResults:
 #     input:
 #         searchgui_zip = RESULT_DIR / "{sample}/FirstSearch/ref_searchgui_out.zip",
@@ -98,7 +99,6 @@ rule SimplePeptideListProteomes:
 #         mgf = SearchDB.get_input_MGF()["mgf"],
 #         tandem_xml = RESULT_DIR / "{sample}/FirstSearch/Filtered_host.t.xml.gz"
 #     output: 
-#         #TODO hostname varialbe: ResultsDir+SampleName+'/FirstSearch/'+HostName+'.psdb'
 #         ms2rescore_out = RESULT_DIR / "{sample}/FirstSearch/ref_Default_PSM_Report.txt",
 #     log:
 #         stderr_log=RESULT_DIR / "logs/FirstSearch/RunMS2Rescore/{sample}/stderr.log",

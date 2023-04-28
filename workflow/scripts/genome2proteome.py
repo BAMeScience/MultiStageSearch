@@ -14,7 +14,6 @@ with open(concat_fasta, "r") as fasta:
     d = ">"
     sequences = [d+e for e in sequences.split(d)][1:]
 
-# TODO multithread
 with open(sixpack_temp, "w") as f:
     for i, sequence in enumerate(sequences):
         if additional_sixpack_params:
