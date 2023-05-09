@@ -1,0 +1,9 @@
+name: pandas
+channels:
+  - bioconda
+  - conda-forge
+  - anaconda
+  - default
+dependencies:
+  - pandas=1.5.3
+
